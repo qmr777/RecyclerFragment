@@ -77,6 +77,11 @@ public class Fragment1 extends Fragment implements LoadData{
                                 .load(gankBeautyBean.getResults().get(0).getUrl())
                                 .into(imageView);
                     }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        throwable.printStackTrace();
+                    }
                 });
 
     }
