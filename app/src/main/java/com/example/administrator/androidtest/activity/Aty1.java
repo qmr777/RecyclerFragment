@@ -18,7 +18,7 @@ import butterknife.ButterKnife;
 
 public class Aty1 extends AppCompatActivity {
 
-    List<Fragment1> fragment1List = new ArrayList<>(5);
+    List<Fragment1> fragment1List = new ArrayList<>();
 
     @BindView(R.id.vp) ViewPager viewPager;
 

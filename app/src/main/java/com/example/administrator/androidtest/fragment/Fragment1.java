@@ -1,12 +1,8 @@
 package com.example.administrator.androidtest.fragment;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.text.TextUtilsCompat;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +12,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.administrator.androidtest.Bean.GankBeautyBean;
-import com.example.administrator.androidtest.LoadData;
 import com.example.administrator.androidtest.R;
 import com.example.administrator.androidtest.network.BeautyService;
 import com.example.administrator.androidtest.network.Network;
@@ -27,7 +22,10 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
-public class Fragment1 extends Fragment implements LoadData{
+/**
+ * 展示图片的Fragment
+ */
+public class Fragment1 extends Fragment{
 
     private static final String TAG = "Fragment1";
 
@@ -86,7 +84,6 @@ public class Fragment1 extends Fragment implements LoadData{
 
     }
 
-    @Override
     public void load(int s) {
         if(this.s != s) {
             this.s = s;

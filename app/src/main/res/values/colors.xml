@@ -3,4 +3,7 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="smoke">#c0c0c0</color>
+    <color name="android_default_grey">#f9f9f9</color><!--接近Android原生背景灰-->
+    <color name="android_selected_grey">@color/smoke</color><!--比默认稍微深一点的颜色-->
 </resources>

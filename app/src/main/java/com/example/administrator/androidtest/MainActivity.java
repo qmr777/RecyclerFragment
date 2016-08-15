@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.administrator.androidtest.activity.Aty1;
+import com.example.administrator.androidtest.activity.Aty2;
+import com.example.administrator.androidtest.adapter.CurrentPageNum;
 import com.example.administrator.androidtest.fragment.Fragment1;
 
 import java.util.List;
@@ -19,6 +21,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @BindView(R.id.btn1)
     Button btn1;
+    @BindView(R.id.btn2)
+    Button btn2;
 
 
     @Override
@@ -27,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         btn1.setOnClickListener(this);
+        btn2.setOnClickListener(this);
     }
 
     @Override
@@ -35,7 +40,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn1:
                 startActivity(new Intent(this, Aty1.class));
                 break;
+            case R.id.btn2:
+                startActivity(new Intent(this, Aty2.class));
+                break;
         }
     }
-
 }
