@@ -5,4 +5,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="activity1">Activity1</string>
     <string name="activity2">Activity2</string>
+    <string name="activity4">Activity4</string>
+    <string name="toastTest">toast测试</string>
 </resources>
