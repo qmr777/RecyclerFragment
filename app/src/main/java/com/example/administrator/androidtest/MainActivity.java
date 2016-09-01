@@ -14,6 +14,7 @@ import com.example.administrator.androidtest.activity.Aty1;
 import com.example.administrator.androidtest.activity.Aty2;
 import com.example.administrator.androidtest.activity.Aty3;
 import com.example.administrator.androidtest.activity.Aty4;
+import com.example.administrator.androidtest.activity.Aty5;
 import com.example.administrator.androidtest.adapter.CurrentPageNum;
 import com.example.administrator.androidtest.fragment.Fragment1;
 
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button btn3;
     @BindView(R.id.btn4)
     Button btn4;
+    @BindView(R.id.btn5)
+    Button btn5;
 
     ListView listView;
     RecyclerView recyclerView;
@@ -49,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn2.setOnClickListener(this);
         btn3.setOnClickListener(this);
         btn4.setOnClickListener(this);
+        btn5.setOnClickListener(this);
     }
 
     @Override
@@ -67,6 +71,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn4:
                 startActivity(new Intent(this,Aty4.class));
+                break;
+            case R.id.btn5:
+                startActivity(new Intent(this, Aty5.class));
                 break;
         }
     }

@@ -6,10 +6,46 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="baseBackground">@color/android_default_grey</item>
     </style>
 
     <style name="ButtonMargin">
         <item name="android:layout_marginBottom">5dp</item>
     </style>
+
+    <style name="AppNightTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:background">@color/android_night_grey</item>
+        <item name="android:textColor">@color/smoke</item>
+        <item name="baseBackground">@color/android_night_grey</item>
+    </style>
+
+    <style name="CustomAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <!--标题文字颜色-->
+        <item name="titleTextColor">@color/white</item>
+        <!--没有标题-->
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowNoTitle">true</item>
+        <!--toolbar按钮颜色-->
+        <!--<item name="colorControlNormal">@color/white</item>-->
+        <item name="android:actionMenuTextColor">@color/white</item>
+        <item name="actionMenuTextColor">@color/white</item>
+    </style>
+
+    <style name="ToolbarTheme" parent="CustomAppTheme">
+        <item name="colorControlNormal">@color/white</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

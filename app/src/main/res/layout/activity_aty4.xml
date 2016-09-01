@@ -21,4 +21,9 @@
 
     </com.example.administrator.androidtest.view.CustomSrl>
 
+<!--    <com.example.administrator.androidtest.view.Anim
+        android:id="@+id/anim"
+        android:layout_width="match_parent"
+        android:layout_height="30dp" />-->
+
 </RelativeLayout>

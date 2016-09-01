@@ -800,7 +800,7 @@ public class CustomSrl extends ViewGroup implements NestedScrollingParent,
                 if (mIsBeingDragged) {
                     if (overscrollTop > 0) {
                         moveSpinner(overscrollTop);
-                        mTarget.setTranslationY(overscrollTop);//
+                        //mTarget.setTranslationY(overscrollTop);//
                     } else {
                         return false;
                     }
