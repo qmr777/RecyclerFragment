@@ -1,6 +1,7 @@
 package com.example.administrator.androidtest.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +19,12 @@ import butterknife.ButterKnife;
  * Created by Administrator on 2016/8/10.
  * 用户反馈 列表项
  */
-public class StringRvAdapter extends RecyclerView.Adapter<StringRvAdapter.FeedbackHolder>{
+public class StringRvAdapter extends RecyclerView.Adapter<StringRvAdapter.FeedbackHolder> {
 
-    LayoutInflater inflater;
-    List<String> resultBeen;
+    private LayoutInflater inflater;
+    private List<String> resultBeen;
 
-    ItemClickListener itemClickListener;
+    private ItemClickListener itemClickListener;
 
 
     @Override

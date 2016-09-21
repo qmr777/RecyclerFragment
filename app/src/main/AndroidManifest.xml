@@ -29,8 +29,13 @@
             android:name=".activity.BaseActivity"
             android:label="@string/title_activity_main2"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.WebViewActivity"
-            android:theme="@style/CustomAppTheme"/>
+        <activity
+            android:name=".activity.WebViewActivity"
+            android:theme="@style/CustomAppTheme" />
+        <activity
+            android:name=".activity.Main3Activity"
+            android:label="@string/title_activity_main3"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

@@ -13,7 +13,9 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Administrator on 2016/8/9.
@@ -41,14 +43,17 @@ public class Network {
                 .map(new Func1<BaseBean<List<AndroidDataBean>>, List<AndroidDataBean>>() {
                     @Override
                     public List<AndroidDataBean> call(BaseBean<List<AndroidDataBean>> listBaseBean) {
-                        if(listBaseBean==null || !listBaseBean.error) {
+                        if(listBaseBean==null || listBaseBean.error) {
                             subscriber.onError(new NetworkErrorException());
                             return null;
                         }
                         else
                             return listBaseBean.results;
                     }
-                }).subscribe(subscriber);
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
     }
 
     public static Retrofit getBaseRetrofit(){

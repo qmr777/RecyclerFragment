@@ -6,8 +6,15 @@
     <string name="activity1">Activity1</string>
     <string name="activity2">Activity2</string>
     <string name="activity4">Activity4</string>
-    <string name="activity5">Activity5</string>
+    <string name="activity5">Retrofit Test</string>
+    <string name="activity3">Activity3</string>
     <string name="toastTest">toast测试</string>
     <string name="title_activity_aty5">Aty5</string>
     <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_main3">Main3Activity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>

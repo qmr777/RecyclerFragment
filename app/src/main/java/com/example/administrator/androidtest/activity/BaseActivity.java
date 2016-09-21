@@ -3,11 +3,14 @@ package com.example.administrator.androidtest.activity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.util.LruCache;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.example.administrator.androidtest.R;
+
+import java.util.TreeMap;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -17,6 +20,8 @@ public class BaseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main2);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //new TreeMap<>().put()
     }
 
 }

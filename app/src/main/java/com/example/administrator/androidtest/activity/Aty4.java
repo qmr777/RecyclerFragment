@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 import android.util.TypedValue;
@@ -38,6 +39,7 @@ public class Aty4 extends AppCompatActivity {
     Handler handler = new Handler();
     //RelativeLayout.LayoutParams params;
     Anim anim;
+    List<String> stringList;
 
     @BindView(R.id.srl)
     CustomSrl customSrl;
@@ -50,13 +52,10 @@ public class Aty4 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setThemeRes(SharePreferenceUtils.getInstance().getMode());
         setContentView(R.layout.activity_aty4);
-        //anim = (Anim) findViewById(R.id.anim);
-        //params = new RelativeLayout.LayoutParams(anim.getLayoutParams());
-        //anim.setLayoutParams();
         ButterKnife.bind(this);
         initView();
+        customSrl.setEnabled(false);
     }
 
     void setThemeRes(boolean b){
@@ -66,27 +65,6 @@ public class Aty4 extends AppCompatActivity {
                 .setDayNightMode(!SharePreferenceUtils.getInstance().getMode());
     }
 
-/*    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getActionMasked()){
-            case MotionEvent.ACTION_DOWN:
-                y = event.getY();
-                basey = anim.getHeight();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                float h = anim.getY();
-                int yy = params.height;
-                yy += event.getY() - y;
-                params.height = yy;
-                anim.setLayoutParams(params);
-                break;
-            case MotionEvent.ACTION_UP:
-                y = event.getY();
-                break;
-        }
-        return true;
-    }*/
-
     void resetTheme(){
         TypedValue bgc = new TypedValue();
         getTheme().resolveAttribute(R.attr.baseBackground,bgc,true);
@@ -94,7 +72,7 @@ public class Aty4 extends AppCompatActivity {
 
     void initView(){
         adapter = new StringRvAdapter();
-        final List<String> stringList = new ArrayList<>();
+        stringList = new ArrayList<>();
         for(int i = 0;i<30;i++){
             stringList.add("String position = " + i);
         }
@@ -103,6 +81,31 @@ public class Aty4 extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
+        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+            @Override
+            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                return makeMovementFlags(ItemTouchHelper.UP|ItemTouchHelper.DOWN,ItemTouchHelper.START|ItemTouchHelper.END);
+            }
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                String temp = stringList.get(target.getAdapterPosition());
+                stringList.set(target.getAdapterPosition(),stringList.get(viewHolder.getAdapterPosition()));
+                stringList.set(viewHolder.getAdapterPosition(),temp);
+                adapter.notifyItemMoved(viewHolder.getAdapterPosition(),target.getAdapterPosition());
+                return true;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                int pos = viewHolder.getAdapterPosition();
+                stringList.remove(pos);
+                adapter.notifyItemRemoved(pos);
+            }
+        });
+
+        helper.attachToRecyclerView(recyclerView);
+/*
         customSrl.setOnRefreshListener(new CustomSrl.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -117,7 +120,7 @@ public class Aty4 extends AppCompatActivity {
                 SharePreferenceUtils.getInstance()
                         .setDayNightMode(!SharePreferenceUtils.getInstance().getMode());
             }
-        });
+        });*/
 
     }
 }

@@ -51,6 +51,21 @@ import java.util.Arrays;
  * provide accessibility events; instead, a menu item must be provided to allow
  * refresh of the content wherever this gesture is used.
  * </p>
+ *
+ *
+ * http://www.jianshu.com/p/f7989a2a3ec2
+ * 嵌套滑动例子
+ *
+ * 需要做的就是，如果要准备开始滑动了，需要告诉Parent，Child要准备进入滑动状态了，
+ * 调用startNestedScroll()。Child在滑动之前，先问一下你的Parent是否需要滑动，
+ * 也就是调用 dispatchNestedPreScroll()。
+ *
+ * 如果父类消耗了部分滑动事件，Child需要重新计算一下父类消耗后剩下给Child的滑动距离余量。
+ * 然后，Child自己进行余下的滑动。
+ *
+ * 最后，如果滑动距离还有剩余，Child就再问一下，Parent是否需要在继续滑动你剩下的距离，
+ * 也就是调用 dispatchNestedScroll()，大概就是这么一回事。
+ *
  */
 public class CustomSrl extends ViewGroup implements NestedScrollingParent,
         NestedScrollingChild {
@@ -109,7 +124,9 @@ public class CustomSrl extends ViewGroup implements NestedScrollingParent,
     // If nested scrolling is enabled, the total amount that needed to be
     // consumed by this as the nested scrolling parent is used in place of the
     // overscroll determined by MOVE events in the onTouch handler
-    private float mTotalUnconsumed;
+    private float mTotalUnconsumedDown;//下拉刷新 拉动的总距离
+    private float mTotalUnconsumedUp;//下拉刷新 拉动的总距离
+
     private final NestedScrollingParentHelper mNestedScrollingParentHelper;
     private final NestedScrollingChildHelper mNestedScrollingChildHelper;
     private final int[] mParentScrollConsumed = new int[2];
@@ -889,7 +906,7 @@ public class CustomSrl extends ViewGroup implements NestedScrollingParent,
         mNestedScrollingParentHelper.onNestedScrollAccepted(child, target, axes);
         // Dispatch up to the nested parent
         startNestedScroll(axes & ViewCompat.SCROLL_AXIS_VERTICAL);
-        mTotalUnconsumed = 0;
+        mTotalUnconsumedDown = 0;
         mNestedScrollInProgress = true;
     }
 
@@ -904,9 +921,11 @@ public class CustomSrl extends ViewGroup implements NestedScrollingParent,
      * 例子：假如 consumed[0] = dx/3;  consumed[1] = dy/3;
      * 那么手指在屏幕上滑过(66,33)的距离,即parent收到(66,33),target只会收到(44,22)
      *
+     * Android中x轴正方向是右，y轴正方向是下，也就是手指从屏幕下方往上滑dy>0
+     *
      * @param target 实现了{@link NestedScrollingChild}的子View
-     * @param dx 横向的滑动距离(px)
-     * @param dy 纵向的滑动距离(dy)
+     * @param dx 横向的滑动坐标差(px)
+     * @param dy 纵向的滑动坐标差(dy)
      * @param consumed 二维数组，代表着继承了{@link NestedScrollingParent}的父View消耗的滑动值
      *                 [0]是横向消耗的，[1]是纵向消耗的
      */
@@ -922,23 +941,23 @@ public class CustomSrl extends ViewGroup implements NestedScrollingParent,
         // before allowing the list to scroll
 
         //以下代码只是针对下拉刷新的 (dy>0)
-        if (dy > 0 && mTotalUnconsumed > 0) {
-            Log.i(TAG, "onNestedPreScroll: 提前移动Spinner");
-            if (dy > mTotalUnconsumed) {
-                consumed[1] = dy - (int) mTotalUnconsumed;
-                mTotalUnconsumed = 0;
+        if (dy > 0 && mTotalUnconsumedDown > 0) {
+            //这是Spinner已经被拉下来，但是手指在向上滑的情况
+            if (dy > mTotalUnconsumedDown) {
+                consumed[1] = dy - (int) mTotalUnconsumedDown;
+                mTotalUnconsumedDown = 0;
             } else {
-                mTotalUnconsumed -= dy;
+                mTotalUnconsumedDown -= dy;
                 consumed[1] = dy;
             }
-            moveSpinner(mTotalUnconsumed);
+            moveSpinner(mTotalUnconsumedDown);
         }
 
         // If a client layout is using a custom start position for the circle
         // view, they mean to hide it again before scrolling the child view
-        // If we get back to mTotalUnconsumed == 0 and there is more to go, hide
+        // If we get back to mTotalUnconsumedDown == 0 and there is more to go, hide
         // the circle so it isn't exposed if its blocking content is moved
-        if (mUsingCustomStart && dy > 0 && mTotalUnconsumed == 0
+        if (mUsingCustomStart && dy > 0 && mTotalUnconsumedDown == 0
                 && Math.abs(dy - consumed[1]) > 0) {
             mCircleView.setVisibility(View.GONE);
         }
@@ -968,9 +987,9 @@ public class CustomSrl extends ViewGroup implements NestedScrollingParent,
         mNestedScrollInProgress = false;
         // Finish the spinner for nested scrolling if we ever consumed any
         // unconsumed nested scroll
-        if (mTotalUnconsumed > 0) {
-            finishSpinner(mTotalUnconsumed);
-            mTotalUnconsumed = 0;
+        if (mTotalUnconsumedDown > 0) {
+            finishSpinner(mTotalUnconsumedDown);
+            mTotalUnconsumedDown = 0;
         }
         // Dispatch up our nested parent
         stopNestedScroll();
@@ -1010,9 +1029,9 @@ public class CustomSrl extends ViewGroup implements NestedScrollingParent,
         // This is a decent indication of whether we should take over the event stream or not.
         final int dy = dyUnconsumed + mParentOffsetInWindow[1];
         if (dy < 0 && !canChildScrollUp()) {
-            mTotalUnconsumed += Math.abs(dy);
+            mTotalUnconsumedDown += Math.abs(dy);
             Log.i(TAG, "onNestedScroll: 正常移动Spinner");
-            moveSpinner(mTotalUnconsumed);
+            moveSpinner(mTotalUnconsumedDown);
         }
     }
 
@@ -1083,7 +1102,7 @@ public class CustomSrl extends ViewGroup implements NestedScrollingParent,
     }
 
     /**
-     * 我赌5毛 这个方法是用来移动{@link #mCircleView}，也就是顶部那个刷新指示器的
+     * 这个方法是用来移动{@link #mCircleView}，也就是顶部那个刷新指示器的
      *
      * @param overscrollTop target未消耗的移动距离
      */
@@ -1092,9 +1111,6 @@ public class CustomSrl extends ViewGroup implements NestedScrollingParent,
             Log.i(TAG, "moveSpinner: 向下移动,mCircleView" + mCircleView.getY());
         else
             Log.i(TAG, "moveSpinner: 向上移动,mCircleView" + mCircleView.getY());
-
-        mTarget.setY(mCircleView.getY() + mCircleView.getHeight());
-
 
         mProgress.showArrow(true);
         float originalDragPercent = overscrollTop / mTotalDragDistance;

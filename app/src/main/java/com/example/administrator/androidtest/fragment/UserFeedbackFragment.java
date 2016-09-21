@@ -175,10 +175,6 @@ public class UserFeedbackFragment extends Fragment {
                     @Override
                     public void call(FeedbackBean feedbackBean) {
                         if("400".equals(feedbackBean.getCode())){
-/*                            Intent intent = new Intent(FeedbackListActivity.this,FeedbackDetailActivity.class);
-                            intent.putExtra("QueText",queText);
-                            intent.putExtra("SceneText",sceneText);
-                            startActivity(intent);*/
                             Toast.makeText(getActivity(),"400",Toast.LENGTH_SHORT).show();
                         } else if("200".equals(feedbackBean.getCode())) {
                             Toast.makeText(getActivity(),"200",Toast.LENGTH_SHORT).show();
